@@ -103,16 +103,12 @@ sandbox.window = sandbox; // window.window === window
 const ctx = vmMod.createContext(sandbox);
 
 try {
-    // 1) vm fonksiyonunu context'e yükle
     new vmMod.Script(rawSrc, { filename: 'vm_labeled.js' }).runInContext(ctx, { timeout: 10000 });
 
-    // 2) exports objesi oluştur
     new vmMod.Script('var exports_dd = {};', { filename: 'setup' }).runInContext(ctx);
 
-    // 3) vm() çağır
     new vmMod.Script('vm(null, exports_dd, null);', { filename: 'vmcall' }).runInContext(ctx, { timeout: 10000 });
 
-    // 4) exports.exports() çağır
     const resultScript = new vmMod.Script('exports_dd.exports()', { filename: 'result' });
     capturedResult = resultScript.runInContext(ctx, { timeout: 10000 });
 
